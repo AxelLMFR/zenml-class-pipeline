@@ -17,30 +17,18 @@ class Preprocess:
         self.config = Config()
         logger.info("Preprocess class initialized.")
 
-    def load_data(self):
-        """Load the data.
-
-        Returns:
-            pd.DataFrame: The loaded data.
-        """
+    def load_data(self) -> None:
+        """Loads the data."""
         self.data = pd.read_csv(self.config.artefact_path.PREPROCESS_INPUT_DATA)
         logger.info("Data loaded.")
 
     def drop_duplicates(self) -> None:
-        """Function to drop duplicates.
-
-        Returns:
-            pd.DataFrame: Deduplicated DataFrame.
-        """
+        """Drops duplicates."""
         self.preprocessed_data = self.data.drop_duplicates()
         logger.info("Duplicates dropped.")
 
     def rename_columns(self) -> None:
-        """Rename columns.
-
-        Returns:
-            pd.DataFrame: The renamed data.
-        """
+        """Renames columns."""
         self.preprocessed_data = self.preprocessed_data.rename(
             columns=dict(
                 zip(
@@ -52,26 +40,21 @@ class Preprocess:
         logger.info("Columns renamed.")
 
     def save_data(self) -> None:
-        """Save the preprocessed data."""
+        """Saves the preprocessed data."""
         self.preprocessed_data.to_csv(
             self.config.artefact_path.PREPROCESS_OUTPUT_DATA, index=False
         )
         logger.info("Data saved.")
 
     def category_encode(self) -> None:
-        """Encode the target column."""
+        """Encodes the target column."""
         self.preprocessed_data["y"] = (
             self.preprocessed_data["y"].astype("category").cat.codes
         )
         logger.info("Target column encoded.")
 
     def main(self) -> None:
-        """Run the preprocessing pipeline.
-
-        Returns:
-        Returns:
-            pd.DataFrame: The preprocessed data.
-        """
+        """Runs the preprocessing pipeline."""
         self.load_data()
         self.drop_duplicates()
         self.rename_columns()

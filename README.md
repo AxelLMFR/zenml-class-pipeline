@@ -1,5 +1,19 @@
 # zenml-class-pipeline
 
+## Architecture
+
+### data
+
+This is where the raw data is stored. In this case, we are using the `iris` dataset from `sklearn`.
+
+### models
+
+This is where the trained model is stored.
+
+### src
+
+This is where the code for the pipeline is stored. The `main.py` file is the entry point for the pipeline.
+
 ## How to execute this pipeline
 
 ```shell
@@ -25,7 +39,7 @@ to run the transform step:
 python src/main.py transform
 ```
 
-to run the full pipeline:
+Or to run the full pipeline:
 
 ```shell
 python src/main.py pipeline

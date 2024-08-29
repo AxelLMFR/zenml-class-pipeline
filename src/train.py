@@ -16,8 +16,8 @@ class Train:
         self.config = Config()
         logger.info("BigQuery client created.")
 
-    def load_data(self):
-        """Load the data using tf.data."""
+    def load_data(self) -> None:
+        """Loads the data using tf.data."""
         dataset = tf.data.experimental.make_csv_dataset(
             self.config.artefact_path.TRAIN_INPUT_DATA,
             batch_size=self.config.train.BATCH_SIZE,
@@ -28,7 +28,16 @@ class Train:
         )
 
         # Rename the input features to match the expected input layer name
-        def rename_features(features, label):
+        def rename_features(features: dict[str, tf.Tensor], label: tf.Tensor) -> tuple:
+            """Renames the features.
+
+            Args:
+                features (dict[str, tf.Tensor]): The features.
+                label (tf.Tensor): The label.
+
+            Returns:
+                tuple: The renamed features and the label.
+            """
             return {
                 self.config.train.INPUT_LAYER_NAME: tf.stack(
                     list(features.values()), axis=1
@@ -38,8 +47,8 @@ class Train:
         self.data = dataset.map(rename_features)
         logger.info("Data loaded.")
 
-    def create_model(self):
-        """Create a simple model."""
+    def create_model(self) -> None:
+        """Creates a simple model."""
         inputs = tf.keras.Input(
             shape=self.config.train.INPUT_SHAPE, name=self.config.train.INPUT_LAYER_NAME
         )
@@ -59,22 +68,22 @@ class Train:
         )
         logger.info("Model created.")
 
-    def train_model(self):
-        """Train the model."""
+    def train_model(self) -> None:
+        """Trains the model."""
         self.model.fit(self.data, epochs=self.config.train.EPOCHS)
         logger.info("Model trained.")
 
-    def evaluate_model(self):
-        """Evaluate the model."""
+    def evaluate_model(self) -> None:
+        """Evaluates the model."""
         loss, accuracy = self.model.evaluate(self.data)
         logger.info(f"Loss: {loss}, Accuracy: {accuracy}")
 
-    def save_model(self):
-        """Save the model."""
+    def save_model(self) -> None:
+        """Saves the model."""
         self.model.save(self.config.artefact_path.TRAIN_MODEL)
         logger.info("Model saved.")
 
-    def main(self):
+    def main(self) -> None:
         """Run the training pipeline."""
         self.load_data()
         self.create_model()

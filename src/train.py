@@ -23,22 +23,33 @@ class Train:
             batch_size=self.config.train.BATCH_SIZE,
             column_names=self.config.preprocess.NEW_COLUMN_NAMES,
             label_name=self.config.train.TARGET_COLUMN_NAME,
-            num_epochs=1, # To read the data only once
+            num_epochs=1,  # To read the data only once
             shuffle=False,
         )
 
         # Rename the input features to match the expected input layer name
         def rename_features(features, label):
-            return {self.config.train.INPUT_LAYER_NAME: tf.stack(list(features.values()), axis=1)}, label
+            return {
+                self.config.train.INPUT_LAYER_NAME: tf.stack(
+                    list(features.values()), axis=1
+                )
+            }, label
 
         self.data = dataset.map(rename_features)
         logger.info("Data loaded.")
 
     def create_model(self):
         """Create a simple model."""
-        inputs = tf.keras.Input(shape=self.config.train.INPUT_SHAPE, name=self.config.train.INPUT_LAYER_NAME)
-        layer = tf.keras.layers.Dense(self.config.train.DENSE_UNITS, activation=self.config.train.DENSE_ACTIVATION)(inputs)
-        output = tf.keras.layers.Dense(self.config.train.OUTPUT_UNITS, activation=self.config.train.OUTPUT_ACTIVATION)(layer)
+        inputs = tf.keras.Input(
+            shape=self.config.train.INPUT_SHAPE, name=self.config.train.INPUT_LAYER_NAME
+        )
+        layer = tf.keras.layers.Dense(
+            self.config.train.DENSE_UNITS, activation=self.config.train.DENSE_ACTIVATION
+        )(inputs)
+        output = tf.keras.layers.Dense(
+            self.config.train.OUTPUT_UNITS,
+            activation=self.config.train.OUTPUT_ACTIVATION,
+        )(layer)
         self.model = tf.keras.Model(inputs=inputs, outputs=output)
 
         self.model.compile(

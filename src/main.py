@@ -3,6 +3,7 @@ from preprocess import Preprocess
 from train import Train
 from transform import Transform
 
+
 @click.group()
 def cli() -> None:
     """CLI for the model."""

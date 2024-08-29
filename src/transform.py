@@ -23,12 +23,19 @@ class Transform:
         dataset = tf.data.experimental.make_csv_dataset(
             self.config.artefact_path.TRANSFORM_INPUT_DATA,
             batch_size=self.config.transform.BATCH_SIZE,
-            column_names=self.config.preprocess.NEW_COLUMN_NAMES[:-1], # Exclude the target column
+            column_names=self.config.preprocess.NEW_COLUMN_NAMES[
+                :-1
+            ],  # Exclude the target column
             num_epochs=1,
             shuffle=False,
         )
+
         def rename_features(features):
-            return {self.config.train.INPUT_LAYER_NAME: tf.stack(list(features.values()), axis=1)}
+            return {
+                self.config.train.INPUT_LAYER_NAME: tf.stack(
+                    list(features.values()), axis=1
+                )
+            }
 
         self.data = dataset.map(rename_features)
         logger.info("Data loaded.")
@@ -51,7 +58,9 @@ class Transform:
 
     def save_data(self):
         """Save the predictions."""
-        pd.DataFrame(self.predictions).to_csv(self.config.artefact_path.TRANSFORM_OUTPUT_DATA, index=False)
+        pd.DataFrame(self.predictions).to_csv(
+            self.config.artefact_path.TRANSFORM_OUTPUT_DATA, index=False
+        )
         logger.info("Data saved.")
 
     def main(self):

@@ -134,9 +134,9 @@ class TransformConfig(BaseSettings):
     class Config:
         case_sensitive = True
 
+
 class Config(BaseSettings):
     preprocess: PreprocessConfig = Field(default_factory=PreprocessConfig)
     train: TrainConfig = Field(default_factory=TrainConfig)
     artefact_path: ArtefactPathConfig = Field(default_factory=ArtefactPathConfig)
     transform: TransformConfig = Field(default_factory=TransformConfig)
-

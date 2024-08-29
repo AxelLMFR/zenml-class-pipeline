@@ -53,12 +53,16 @@ class Preprocess:
 
     def save_data(self) -> None:
         """Save the preprocessed data."""
-        self.preprocessed_data.to_csv(self.config.artefact_path.PREPROCESS_OUTPUT_DATA, index=False)
+        self.preprocessed_data.to_csv(
+            self.config.artefact_path.PREPROCESS_OUTPUT_DATA, index=False
+        )
         logger.info("Data saved.")
 
     def category_encode(self) -> None:
         """Encode the target column."""
-        self.preprocessed_data["y"] = self.preprocessed_data["y"].astype("category").cat.codes
+        self.preprocessed_data["y"] = (
+            self.preprocessed_data["y"].astype("category").cat.codes
+        )
         logger.info("Target column encoded.")
 
     def main(self) -> None:

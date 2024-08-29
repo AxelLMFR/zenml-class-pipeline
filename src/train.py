@@ -20,25 +20,25 @@ class Train:
         """Load the data using tf.data."""
         dataset = tf.data.experimental.make_csv_dataset(
             self.config.artefact_path.TRAIN_INPUT_DATA,
-            batch_size=5,
+            batch_size=self.config.train.BATCH_SIZE,
             column_names=self.config.preprocess.NEW_COLUMN_NAMES,
             label_name=self.config.train.TARGET_COLUMN_NAME,
-            num_epochs=1,
+            num_epochs=1, # To read the data only once
             shuffle=False,
         )
 
         # Rename the input features to match the expected input layer name
         def rename_features(features, label):
-            return {'input_layer': tf.stack(list(features.values()), axis=1)}, label
+            return {self.config.train.INPUT_LAYER_NAME: tf.stack(list(features.values()), axis=1)}, label
 
         self.data = dataset.map(rename_features)
         logger.info("Data loaded.")
 
     def create_model(self):
         """Create a simple model."""
-        inputs = tf.keras.Input(shape=(4,), name='input_layer')
-        layer = tf.keras.layers.Dense(10, activation="relu")(inputs)
-        output = tf.keras.layers.Dense(3, activation="softmax")(layer)
+        inputs = tf.keras.Input(shape=self.config.train.INPUT_SHAPE, name=self.config.train.INPUT_LAYER_NAME)
+        layer = tf.keras.layers.Dense(self.config.train.DENSE_UNITS, activation=self.config.train.DENSE_ACTIVATION)(inputs)
+        output = tf.keras.layers.Dense(self.config.train.OUTPUT_UNITS, activation=self.config.train.OUTPUT_ACTIVATION)(layer)
         self.model = tf.keras.Model(inputs=inputs, outputs=output)
 
         self.model.compile(
@@ -50,7 +50,7 @@ class Train:
 
     def train_model(self):
         """Train the model."""
-        self.model.fit(self.data, epochs=10)
+        self.model.fit(self.data, epochs=self.config.train.EPOCHS)
         logger.info("Model trained.")
 
     def evaluate_model(self):

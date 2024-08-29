@@ -37,12 +37,11 @@ class ArtefactPathConfig(BaseSettings):
         env="PATH_TRANSFORM_OUTPUT_DATA",
     )
 
-
     class Config:
         case_sensitive = True
 
-class PreprocessConfig(BaseSettings):
 
+class PreprocessConfig(BaseSettings):
     OLD_COLUMN_NAMES: list[str] = Field(
         default=[
             "sepal_length",
@@ -72,11 +71,72 @@ class TrainConfig(BaseSettings):
         env="TRAIN_TARGET_COLUMN_NAME",
     )
 
+    BATCH_SIZE: int = Field(
+        default=5,
+        description="Batch size.",
+        env="TRAIN_BATCH_SIZE",
+    )
+
+    INPUT_SHAPE: tuple[int] = Field(
+        default=(4,),
+        description="Input shape.",
+        env="TRAIN_INPUT_SHAPE",
+    )
+
+    INPUT_LAYER_NAME: str = Field(
+        default="input_layer",
+        description="Input layer name.",
+        env="TRAIN_INPUT_LAYER_NAME",
+    )
+
+    DENSE_UNITS: int = Field(
+        default=10,
+        description="Number of units in the dense layer.",
+        env="TRAIN_DENSE_UNITS",
+    )
+
+    DENSE_ACTIVATION: str = Field(
+        default="relu",
+        description="Activation function for the dense layer.",
+        env="TRAIN_DENSE_ACTIVATION",
+    )
+
+    OUTPUT_UNITS: int = Field(
+        default=3,
+        description="Number of output units.",
+        env="TRAIN_OUTPUT_UNITS",
+    )
+
+    OUTPUT_ACTIVATION: str = Field(
+        default="softmax",
+        description="Activation function for the output layer.",
+        env="TRAIN_OUTPUT_ACTIVATION",
+    )
+
+    EPOCHS: int = Field(
+        default=10,
+        description="Number of epochs.",
+        env="TRAIN_EPOCHS",
+    )
+
     class Config:
         case_sensitive = True
 
+
+class TransformConfig(BaseSettings):
+
+    BATCH_SIZE: int = Field(
+        default=2,
+        description="Batch size.",
+        env="TRANSFORM_BATCH_SIZE",
+    )
+
+    class Config:
+        case_sensitive = True
 
 class Config(BaseSettings):
     preprocess: PreprocessConfig = Field(default_factory=PreprocessConfig)
     train: TrainConfig = Field(default_factory=TrainConfig)
     artefact_path: ArtefactPathConfig = Field(default_factory=ArtefactPathConfig)
+    transform: TransformConfig = Field(default_factory=TransformConfig)
+

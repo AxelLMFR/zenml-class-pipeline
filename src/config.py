@@ -20,7 +20,7 @@ class ArtefactPathConfig(BaseSettings):
     )
 
     TRAIN_MODEL: str = Field(
-        default="models/iris_model.h5",
+        default="models/iris_model.keras",
         description="Path to the save the trained model.",
         env="PATH_TRAIN_MODEL",
     )

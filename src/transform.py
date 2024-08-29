@@ -52,12 +52,6 @@ class Transform:
         self.data = dataset.map(rename_features)
         logger.info("Data loaded.")
 
-    def prepare_data(self) -> None:
-        """Prepares the data to concatenate the features into input_layer."""
-        self.data = next(iter(self.data))
-        self.data = tf.concat(list(self.data.values()), axis=1)
-        logger.info("Data prepared.")
-
     def load_model(self) -> None:
         """Loads the trained model."""
         self.model = tf.keras.models.load_model(self.config.artefact_path.TRAIN_MODEL)
@@ -78,7 +72,6 @@ class Transform:
     def main(self) -> None:
         """Runs the main pipeline."""
         self.load_data()
-        self.prepare_data()
         self.load_model()
         self.transform_data()
         self.save_data()

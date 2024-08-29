@@ -11,11 +11,15 @@ class Transform:
         config (Config): The configuration object.
         data (tf.data.Dataset): The input data.
         model (tf.keras.Model): The trained model.
+        predictions (tf.Tensor): The predictions.
     """
 
     def __init__(self) -> None:
         """Constructor."""
         self.config = Config()
+        self.data = None
+        self.model = None
+        self.predictions = None
         logger.info("Transform class initialized")
 
     def load_data(self) -> None:

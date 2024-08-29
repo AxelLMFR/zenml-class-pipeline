@@ -9,11 +9,14 @@ class Train:
     Attributes:
         config (Config): The configuration object.
         data (tf.data.Dataset): The input data.
+        model (tf.keras.Model): The trained model.
     """
 
     def __init__(self) -> None:
         """Constructor."""
         self.config = Config()
+        self.data = None
+        self.model = None
         logger.info("BigQuery client created.")
 
     def load_data(self) -> None:

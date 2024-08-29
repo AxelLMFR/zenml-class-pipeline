@@ -15,6 +15,8 @@ class Preprocess:
     def __init__(self) -> None:
         """Constructor."""
         self.config = Config()
+        self.data = None
+        self.preprocessed_data = None
         logger.info("Preprocess class initialized.")
 
     def load_data(self) -> None:

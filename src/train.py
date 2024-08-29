@@ -84,7 +84,7 @@ class Train:
         logger.info("Model saved.")
 
     def main(self) -> None:
-        """Run the training pipeline."""
+        """Runs the training pipeline."""
         self.load_data()
         self.create_model()
         self.train_model()

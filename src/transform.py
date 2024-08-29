@@ -18,8 +18,8 @@ class Transform:
         self.config = Config()
         logger.info("Transform class initialized")
 
-    def load_data(self):
-        """Load the data using tf.data."""
+    def load_data(self) -> None:
+        """Loads the data using tf.data."""
         dataset = tf.data.experimental.make_csv_dataset(
             self.config.artefact_path.TRANSFORM_INPUT_DATA,
             batch_size=self.config.transform.BATCH_SIZE,
@@ -30,7 +30,15 @@ class Transform:
             shuffle=False,
         )
 
-        def rename_features(features):
+        def rename_features(features: dict[str, tf.Tensor]) -> dict[str, tf.Tensor]:
+            """Renames the features.
+
+            Args:
+                features (dict[str, tf.Tensor]): The features.
+
+            Returns:
+                dict[str, tf.Tensor]: The renamed features.
+            """
             return {
                 self.config.train.INPUT_LAYER_NAME: tf.stack(
                     list(features.values()), axis=1
@@ -40,31 +48,31 @@ class Transform:
         self.data = dataset.map(rename_features)
         logger.info("Data loaded.")
 
-    def prepare_data(self):
-        """Prepare the data to concatenate the features into input_layer."""
+    def prepare_data(self) -> None:
+        """Prepares the data to concatenate the features into input_layer."""
         self.data = next(iter(self.data))
         self.data = tf.concat(list(self.data.values()), axis=1)
         logger.info("Data prepared.")
 
-    def load_model(self):
-        """Load the trained model."""
+    def load_model(self) -> None:
+        """Loads the trained model."""
         self.model = tf.keras.models.load_model(self.config.artefact_path.TRAIN_MODEL)
         logger.info("Model loaded.")
 
-    def transform_data(self):
-        """Transform the data."""
+    def transform_data(self) -> None:
+        """Transforms the data."""
         self.predictions = self.model.predict(self.data)
         logger.info("Data transformed.")
 
-    def save_data(self):
-        """Save the predictions."""
+    def save_data(self) -> None:
+        """Saves the predictions."""
         pd.DataFrame(self.predictions).to_csv(
             self.config.artefact_path.TRANSFORM_OUTPUT_DATA, index=False
         )
         logger.info("Data saved.")
 
-    def main(self):
-        """Run the main pipeline."""
+    def main(self) -> None:
+        """Runs the main pipeline."""
         self.load_data()
         self.prepare_data()
         self.load_model()
